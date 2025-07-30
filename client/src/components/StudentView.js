@@ -40,10 +40,10 @@ const StudentView = () => {
       <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <h1 className="text-3xl font-bold text-gray-900">Student View</h1>
+            <h1 className="text-3xl font-bold text-gray-900 animate-slide-down">Student View</h1>
             <button
               onClick={() => navigate('/')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200 hover:scale-105"
             >
               Back to Home
             </button>
@@ -52,11 +52,11 @@ const StudentView = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+        <div className="text-center mb-8 animate-fade-in">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2 animate-slide-down">
             Available OD Slots
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 animate-slide-up">
             Click on a slot to submit your OD request
           </p>
         </div>
@@ -76,7 +76,7 @@ const StudentView = () => {
               <div
                 key={slot._id}
                 onClick={() => handleSlotClick(slot._id)}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer border border-gray-200"
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-200 transform hover:scale-105 hover:-translate-y-1"
               >
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
