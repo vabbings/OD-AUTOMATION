@@ -9,7 +9,9 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://od-automation-client.vercel.app', 'https://od-automation-git-main-vabbings.vercel.app', 'https://your-frontend-domain.vercel.app']
+    : 'http://localhost:3000',
   credentials: true
 }));
 app.use(express.json());
@@ -17,7 +19,10 @@ app.use(session({
   secret: 'od-automation-secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  }
 }));
 
 // In-memory storage for development (replace with MongoDB later)
