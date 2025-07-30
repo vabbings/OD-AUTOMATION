@@ -68,16 +68,24 @@ OD AUTOMATION/
 ## 🚀 Installation & Setup
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
+- **Node.js** (v14 or higher) - Download from [nodejs.org](https://nodejs.org/)
+- **Git** - Download from [git-scm.com](https://git-scm.com/)
+- **Code Editor** (VS Code recommended) - Download from [code.visualstudio.com](https://code.visualstudio.com/)
 
-### 1. Clone the Repository
+### Quick Setup (Windows)
+1. **Download and run** `setup.bat` file
+2. **Start the application**: `npm run dev`
+3. **Open browser**: http://localhost:3000
+
+### Manual Setup
+
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/vabbings/OD-AUTOMATION.git
 cd OD-AUTOMATION
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
 ```bash
 # Install root dependencies
 npm install
@@ -88,19 +96,19 @@ npm install
 cd ..
 ```
 
-### 3. Environment Configuration
+#### 3. Environment Configuration
 Create a `.env` file in the root directory:
 ```env
 # Server Configuration
 PORT=5000
 NODE_ENV=development
 
-# Email Configuration (Gmail)
-EMAIL_USER=odautomation01@gmail.com
-EMAIL_PASS=mvrh ylun pkxh gtnz
+# Email Configuration (Optional)
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
 ```
 
-### 4. Start the Application
+#### 4. Start the Application
 ```bash
 # Start both client and server
 npm run dev
@@ -108,6 +116,36 @@ npm run dev
 # Or start individually
 npm run server    # Backend only
 npm run client    # Frontend only
+```
+
+### Troubleshooting
+
+#### Port Already in Use
+```bash
+# Kill existing processes
+taskkill /f /im node.exe
+
+# Or change port in .env
+PORT=5001
+```
+
+#### Dependencies Issues
+```bash
+# Clear cache and reinstall
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### PowerShell Issues
+If you get `&&` command errors in PowerShell:
+```powershell
+# Use separate commands
+npm install
+cd client
+npm install
+cd ..
+npm run dev
 ```
 
 ## 🌐 Access the Application
