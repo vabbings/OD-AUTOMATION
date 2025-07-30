@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingType, setLoadingType] = useState('');
+  const navigate = useNavigate();
 
-  const handleNavigation = (path, type) => {
+  const handleNavigation = async (path, type) => {
     setIsLoading(true);
     setLoadingType(type);
     
-    // Add a small delay for smooth transition
-    setTimeout(() => {
-      navigate(path);
-    }, 300);
+    // Simulate loading delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    navigate(path);
   };
 
   return (
@@ -70,9 +70,9 @@ const LandingPage = () => {
           </button>
         </div>
         
-        <div className="text-center text-sm text-gray-500 mt-8 animate-fade-in">
-          <p>Coordinator: Manage slots and approve requests</p>
-          <p>Student: Submit OD requests for available slots</p>
+        <div className="text-center text-sm text-gray-500 mt-8">
+          <p>Coordinator: Manage and approve requests</p>
+          <p>Student: Submit OD requests with date and time</p>
         </div>
       </div>
     </div>

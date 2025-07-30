@@ -21,7 +21,6 @@ app.use(session({
 }));
 
 // In-memory storage for development (replace with MongoDB later)
-global.slots = [];
 global.requests = [];
 global.requestId = 1;
 
@@ -48,13 +47,11 @@ db.once('open', () => {
 
 // Import routes
 const authRoutes = require('./routes/auth');
-const slotRoutes = require('./routes/slots');
 const requestRoutes = require('./routes/requests');
 const exportRoutes = require('./routes/export');
 
 // Use routes
 app.use('/api', authRoutes);
-app.use('/api', slotRoutes);
 app.use('/api', requestRoutes);
 app.use('/api', exportRoutes);
 

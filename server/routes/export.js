@@ -33,9 +33,10 @@ const createExcelFile = async (approvedRequests) => {
     { header: 'Name', key: 'name', width: 25 },
     { header: 'Enrollment Number', key: 'enrollmentNumber', width: 20 },
     { header: 'Subject Code', key: 'subjectCode', width: 15 },
-    { header: 'Slot Title', key: 'slotTitle', width: 25 },
     { header: 'Date', key: 'date', width: 15 },
-    { header: 'Time', key: 'time', width: 15 },
+    { header: 'Time From', key: 'timeFrom', width: 15 },
+    { header: 'Time To', key: 'timeTo', width: 15 },
+    { header: 'Reason', key: 'reason', width: 40 },
     { header: 'Status', key: 'status', width: 12 }
   ];
 
@@ -47,28 +48,84 @@ const createExcelFile = async (approvedRequests) => {
     fgColor: { argb: 'FFE0E0E0' }
   };
 
-  // Add data rows
+  // Group requests by faculty code, date, and time
+  const groupedRequests = {};
   approvedRequests.forEach(request => {
-    const slot = global.slots.find(s => s._id === request.slotId);
+    const key = `${request.facultyCode}_${request.date}_${request.timeFrom}_${request.timeTo}`;
+    if (!groupedRequests[key]) {
+      groupedRequests[key] = [];
+    }
+    groupedRequests[key].push(request);
+  });
+
+  let currentRow = 2; // Start after header
+
+  // Add grouped data
+  Object.values(groupedRequests).forEach(group => {
+    // Add separator row if not first group
+    if (currentRow > 2) {
+      worksheet.addRow([]); // Blank row
+      currentRow++;
+    }
+
+    // Add group header
+    const firstRequest = group[0];
     worksheet.addRow({
-      facultyCode: request.facultyCode,
-      name: request.name,
-      enrollmentNumber: request.enrollmentNumber,
-      subjectCode: request.subjectCode,
-      slotTitle: slot ? slot.title : 'Unknown',
-      date: slot ? slot.date.toLocaleDateString() : 'Unknown',
-      time: slot ? slot.time : 'Unknown',
-      status: request.status
+      facultyCode: firstRequest.facultyCode,
+      name: `--- ${firstRequest.facultyCode} - ${firstRequest.date} - ${firstRequest.timeFrom} to ${firstRequest.timeTo} ---`,
+      enrollmentNumber: '',
+      subjectCode: '',
+      date: '',
+      timeFrom: '',
+      timeTo: '',
+      reason: '',
+      status: ''
+    });
+
+    // Style the group header
+    const groupHeaderRow = worksheet.getRow(currentRow);
+    groupHeaderRow.font = { bold: true, color: { argb: 'FF0000FF' } };
+    groupHeaderRow.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFF0F0F0' }
+    };
+    currentRow++;
+
+    // Add requests in this group
+    group.forEach(request => {
+      worksheet.addRow({
+        facultyCode: request.facultyCode,
+        name: request.name,
+        enrollmentNumber: request.enrollmentNumber,
+        subjectCode: request.subjectCode,
+        date: request.date,
+        timeFrom: request.timeFrom,
+        timeTo: request.timeTo,
+        reason: request.reason,
+        status: request.status
+      });
+      currentRow++;
     });
   });
 
   return workbook;
 };
 
+// Helper function to delete processed requests
+const deleteProcessedRequests = () => {
+  const requestsToDelete = global.requests.filter(req => req.status === 'Approved' || req.status === 'Rejected');
+  global.requests = global.requests.filter(req => req.status === 'Pending');
+  
+  console.log(`Deleted ${requestsToDelete.length} processed requests (${requestsToDelete.filter(r => r.status === 'Approved').length} approved, ${requestsToDelete.filter(r => r.status === 'Rejected').length} rejected)`);
+  
+  return requestsToDelete.length;
+};
+
 // GET /api/export - Export approved requests to Excel (Coordinator only)
 router.get('/export', requireAuth, async (req, res) => {
   try {
-    // Get all approved requests with slot details
+    // Get all approved requests
     const approvedRequests = global.requests.filter(req => req.status === 'Approved');
     
     if (approvedRequests.length === 0) {
@@ -85,6 +142,9 @@ router.get('/export', requireAuth, async (req, res) => {
     await workbook.xlsx.write(res);
     res.end();
 
+    // Delete processed requests after successful export
+    const deletedCount = deleteProcessedRequests();
+
   } catch (error) {
     console.error('Error exporting data:', error);
     res.status(500).json({ error: 'Server error' });
@@ -100,7 +160,7 @@ router.post('/export-email', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'Email is required' });
     }
 
-    // Get all approved requests with slot details
+    // Get all approved requests
     const approvedRequests = global.requests.filter(req => req.status === 'Approved');
     
     if (approvedRequests.length === 0) {
@@ -153,10 +213,14 @@ router.post('/export-email', requireAuth, async (req, res) => {
     // Send email
     await transporter.sendMail(mailOptions);
 
+    // Delete processed requests after successful email
+    const deletedCount = deleteProcessedRequests();
+
     res.json({ 
       success: true, 
-      message: `Report sent successfully to ${email}`,
-      requestCount: approvedRequests.length
+      message: `Report sent successfully to ${email}. ${deletedCount} processed requests have been deleted from storage.`,
+      requestCount: approvedRequests.length,
+      deletedCount: deletedCount
     });
 
   } catch (error) {

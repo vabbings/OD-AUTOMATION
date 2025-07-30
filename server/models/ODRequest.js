@@ -21,18 +21,35 @@ const odRequestSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  date: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  timeFrom: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  timeTo: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  reason: {
+    type: String,
+    required: true,
+    trim: true
+  },
   status: {
     type: String,
     enum: ['Pending', 'Approved', 'Rejected'],
     default: 'Pending'
   },
-  slotId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Slot',
-    required: true
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
-}, {
-  timestamps: true
 });
 
 module.exports = mongoose.model('ODRequest', odRequestSchema); 
