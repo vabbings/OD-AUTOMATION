@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const session = require('express-session');
 const path = require('path');
 require('dotenv').config();
 
@@ -15,17 +14,11 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-app.use(session({
-  secret: 'od-automation-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-  }
-}));
 
-// In-memory storage for development (replace with MongoDB later)
+// Simple authentication state (for serverless compatibility)
+let isAuthenticated = false;
+
+// In-memory storage for development (will reset on serverless function calls)
 global.requests = [];
 global.requestId = 1;
 
@@ -71,4 +64,7 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log('Using in-memory storage for development');
-}); 
+});
+
+// Export for Vercel serverless
+module.exports = app; 

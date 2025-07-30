@@ -1,8 +1,10 @@
 // API Configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || '';
-
-// Create axios instance with base URL
 import axios from 'axios';
+
+// Use the same domain for both frontend and backend
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '' // Same domain in production
+  : 'http://localhost:5000'; // Local development
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -12,10 +14,10 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor for debugging
+// Request interceptor for debugging
 api.interceptors.request.use(
   (config) => {
-    console.log('API Request:', config.method?.toUpperCase(), config.url);
+    console.log('API Request:', config.method?.toUpperCase(), config.url, config.data);
     return config;
   },
   (error) => {
@@ -24,14 +26,14 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor for debugging
+// Response interceptor for debugging
 api.interceptors.response.use(
   (response) => {
-    console.log('API Response:', response.status, response.config.url);
+    console.log('API Response:', response.status, response.data);
     return response;
   },
   (error) => {
-    console.error('API Response Error:', error.response?.status, error.response?.config?.url);
+    console.error('API Response Error:', error.response?.status, error.response?.data);
     return Promise.reject(error);
   }
 );
