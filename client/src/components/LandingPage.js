@@ -20,8 +20,8 @@ const LandingPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-md w-full space-y-8 p-8">
         <div className="text-center animate-fade-in">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 animate-slide-down">
-            OD Automation System
+          <h1 className="text-5xl font-black text-black mb-2 animate-slide-down hover:scale-110 transition-all duration-500 cursor-default">
+            OD AUTOMATION SYSTEM
           </h1>
           <p className="text-gray-600 mb-8 animate-slide-up">
             Choose your role to continue
