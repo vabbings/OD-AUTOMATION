@@ -305,7 +305,7 @@ const StudentView = () => {
             <h1 className="text-3xl font-bold text-white animate-slide-down">Submit OD Request</h1>
             <button
               onClick={() => navigate('/')}
-              className="px-4 py-2 text-sm font-medium text-white bg-white/20 hover:bg-white/30 rounded-lg backdrop-blur-sm transition-all duration-300 hover:scale-105"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white/90 rounded-lg backdrop-blur-sm transition-all duration-300"
             >
               Back to Home
             </button>
@@ -324,7 +324,7 @@ const StudentView = () => {
         </div>
 
         {/* Request Form */}
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-white/30 animate-float">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-white/30">
           {error && (
             <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
               <div className="text-red-600 text-sm">{error}</div>
@@ -489,7 +489,7 @@ const StudentView = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? 'Submitting...' : 'Submit OD Request'}
               </button>

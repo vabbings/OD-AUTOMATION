@@ -48,19 +48,19 @@ const CoordinatorLogin = () => {
         <div className="absolute bottom-20 right-20 w-5 h-5 bg-violet-400 rounded-full animate-bounce opacity-30"></div>
       </div>
       
-      <div className="max-w-md w-full space-y-8 p-8 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 animate-float">
+      <div className="max-w-md w-full space-y-8 p-8 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30">
         <div className="text-center animate-fade-in">
-          <h2 className="text-3xl font-bold text-white mb-2 animate-slide-down">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2 animate-slide-down">
             Coordinator Login
           </h2>
-          <p className="text-white/80 animate-slide-up">
+          <p className="text-gray-700 animate-slide-up font-medium">
             Enter your password to access the coordinator dashboard
           </p>
         </div>
         
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-white mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">
               Password
             </label>
             <div className="relative">
@@ -71,7 +71,7 @@ const CoordinatorLogin = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 pr-10 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent bg-white/20 text-white placeholder-white/60 transition-all duration-200"
+                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900 placeholder-gray-500 transition-all duration-200"
                 placeholder="Enter password"
               />
               <button
@@ -102,7 +102,7 @@ const CoordinatorLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 active:scale-95"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
           >
             {loading ? (
               <>

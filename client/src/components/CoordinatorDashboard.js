@@ -131,10 +131,10 @@ const CoordinatorDashboard = () => {
       <div className="bg-white/10 backdrop-blur-md shadow-lg border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <h1 className="text-3xl font-bold text-white">Coordinator Dashboard</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Coordinator Dashboard</h1>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 text-sm font-medium text-white bg-white/20 hover:bg-white/30 rounded-lg backdrop-blur-sm transition-all duration-300"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white/90 hover:bg-white rounded-lg backdrop-blur-sm transition-all duration-300"
             >
               Logout
             </button>
@@ -146,57 +146,57 @@ const CoordinatorDashboard = () => {
         {/* OD Requests Section */}
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-white">OD Requests</h2>
+            <h2 className="text-xl font-semibold text-gray-900">OD Requests</h2>
             <div className="flex space-x-3">
               <button
                 onClick={handleExport}
                 disabled={exportLoading}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg disabled:opacity-50"
               >
                 {exportLoading ? 'Exporting...' : 'Download Excel'}
               </button>
               <button
                 onClick={() => setShowEmailModal(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
               >
                 Send via Email
               </button>
             </div>
           </div>
 
-          <div className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl border border-white/30 animate-float">
+          <div className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl border border-white/30">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-white/20">
                 <thead className="bg-white/20 backdrop-blur-sm">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Student
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Enrollment
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Subject
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Faculty
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Time From
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Time To
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Reason
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -204,28 +204,28 @@ const CoordinatorDashboard = () => {
                 <tbody className="bg-white/5 divide-y divide-white/10">
                   {requests.map((request) => (
                     <tr key={request._id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {request.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {request.enrollmentNumber}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {request.subjectCode}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {request.facultyCode}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {new Date(request.date).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {request.timeFrom}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white/80">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {request.timeTo}
                       </td>
-                      <td className="px-6 py-4 text-sm text-white/80 max-w-xs truncate">
+                      <td className="px-6 py-4 text-sm text-gray-700 max-w-xs truncate">
                         {request.reason}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -242,13 +242,13 @@ const CoordinatorDashboard = () => {
                           <div className="space-x-2">
                             <button
                               onClick={() => handleRequestAction(request._id, 'Approved')}
-                              className="text-green-600 hover:text-green-900"
+                              className="text-green-600"
                             >
                               Approve
                             </button>
                             <button
                               onClick={() => handleRequestAction(request._id, 'Rejected')}
-                              className="text-red-600 hover:text-red-900"
+                              className="text-red-600"
                             >
                               Reject
                             </button>
