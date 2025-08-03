@@ -30,10 +30,9 @@ const createExcelFile = async (approvedRequests) => {
   // Define columns
   worksheet.columns = [
     { header: 'Faculty Code', key: 'facultyCode', width: 15 },
+    { header: 'Subject Code', key: 'subjectCode', width: 15 },
     { header: 'Name', key: 'name', width: 25 },
     { header: 'Enrollment Number', key: 'enrollmentNumber', width: 20 },
-    { header: 'Subject Code', key: 'subjectCode', width: 15 },
-    { header: 'Date', key: 'date', width: 15 },
     { header: 'Time From', key: 'timeFrom', width: 15 },
     { header: 'Time To', key: 'timeTo', width: 15 },
     { header: 'Reason', key: 'reason', width: 40 },
@@ -48,10 +47,10 @@ const createExcelFile = async (approvedRequests) => {
     fgColor: { argb: 'FFE0E0E0' }
   };
 
-  // Group requests by faculty code, date, and time
+  // Group requests by faculty code and time
   const groupedRequests = {};
   approvedRequests.forEach(request => {
-    const key = `${request.facultyCode}_${request.date}_${request.timeFrom}_${request.timeTo}`;
+    const key = `${request.facultyCode}_${request.timeFrom}_${request.timeTo}`;
     if (!groupedRequests[key]) {
       groupedRequests[key] = [];
     }
@@ -72,10 +71,9 @@ const createExcelFile = async (approvedRequests) => {
     const firstRequest = group[0];
     worksheet.addRow({
       facultyCode: firstRequest.facultyCode,
-      name: `--- ${firstRequest.facultyCode} - ${firstRequest.date} - ${firstRequest.timeFrom} to ${firstRequest.timeTo} ---`,
-      enrollmentNumber: '',
       subjectCode: '',
-      date: '',
+      name: `--- ${firstRequest.facultyCode} - ${firstRequest.timeFrom} to ${firstRequest.timeTo} ---`,
+      enrollmentNumber: '',
       timeFrom: '',
       timeTo: '',
       reason: '',
@@ -96,10 +94,9 @@ const createExcelFile = async (approvedRequests) => {
     group.forEach(request => {
       worksheet.addRow({
         facultyCode: request.facultyCode,
+        subjectCode: request.subjectCode,
         name: request.name,
         enrollmentNumber: request.enrollmentNumber,
-        subjectCode: request.subjectCode,
-        date: request.date,
         timeFrom: request.timeFrom,
         timeTo: request.timeTo,
         reason: request.reason,

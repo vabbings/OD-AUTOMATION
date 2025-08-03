@@ -35,13 +35,30 @@ const StudentView = () => {
     const selectedDate = new Date(date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return selectedDate <= today;
+    return selectedDate <= today; // This already allows same date (today)
   };
 
   const validateTimeRange = (timeFrom, timeTo) => {
     const fromTime = new Date(`2000-01-01 ${timeFrom}`);
     const toTime = new Date(`2000-01-01 ${timeTo}`);
     return toTime > fromTime;
+  };
+
+  // Get available "To" time options based on selected "From" time
+  const getAvailableToTimes = (timeFrom) => {
+    if (!timeFrom) return [];
+    
+    const allTimes = [
+      '10:10 AM', '11:10 AM', '12:10 PM', '01:10 PM', 
+      '02:10 PM', '03:10 PM', '04:10 PM', '05:10 PM'
+    ];
+    
+    const fromTime = new Date(`2000-01-01 ${timeFrom}`);
+    
+    return allTimes.filter(time => {
+      const toTime = new Date(`2000-01-01 ${time}`);
+      return toTime > fromTime;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -126,10 +143,47 @@ const StudentView = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    let processedValue = value;
+    
+    // Auto-capitalize based on field type
+    switch (name) {
+      case 'name':
+        // Capitalize first letter of each word
+        processedValue = value.replace(/\b\w/g, l => l.toUpperCase());
+        break;
+      case 'enrollmentNumber':
+        // Ensure 'A' is capitalized and rest are numbers
+        if (value.length > 0 && !value.startsWith('A')) {
+          processedValue = 'A' + value.substring(1).replace(/[^0-9]/g, '');
+        } else {
+          processedValue = value.toUpperCase();
+        }
+        break;
+      case 'subjectCode':
+        // Capitalize alphabets, keep numbers as is
+        processedValue = value.replace(/[A-Za-z]/g, l => l.toUpperCase());
+        break;
+      case 'reason':
+        // Capitalize first letter of each sentence
+        processedValue = value.replace(/(^\w|\.\s+\w)/g, l => l.toUpperCase());
+        break;
+      default:
+        processedValue = value;
+    }
+    
+    // Clear "To" time when "From" time changes
+    if (name === 'timeFrom') {
+      setFormData({
+        ...formData,
+        [name]: processedValue,
+        timeTo: '' // Clear the "To" time when "From" time changes
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: processedValue
+      });
+    }
   };
 
   if (success) {
@@ -198,7 +252,7 @@ const StudentView = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter your full name"
+                placeholder="Enter your full name (auto-capitalized)"
               />
             </div>
 
@@ -214,7 +268,7 @@ const StudentView = () => {
                 value={formData.enrollmentNumber}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter your enrollment number"
+                placeholder="Enter your enrollment number (starts with A)"
               />
             </div>
 
@@ -230,7 +284,7 @@ const StudentView = () => {
                 value={formData.subjectCode}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter subject code"
+                placeholder="Enter subject code (e.g., ABC123)"
               />
             </div>
 
@@ -278,7 +332,7 @@ const StudentView = () => {
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 rows="4"
-                placeholder="Enter the reason for the OD request"
+                placeholder="Enter the reason for the OD request (auto-capitalized)"
               />
             </div>
 
@@ -318,16 +372,12 @@ const StudentView = () => {
                   value={formData.timeTo}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  disabled={!formData.timeFrom}
                 >
-                  <option value="">Select Time</option>
-                  <option value="10:10 AM">10:10 AM</option>
-                  <option value="11:10 AM">11:10 AM</option>
-                  <option value="12:10 PM">12:10 PM</option>
-                  <option value="01:10 PM">01:10 PM</option>
-                  <option value="02:10 PM">02:10 PM</option>
-                  <option value="03:10 PM">03:10 PM</option>
-                  <option value="04:10 PM">04:10 PM</option>
-                  <option value="05:10 PM">05:10 PM</option>
+                  <option value="">{formData.timeFrom ? 'Select Time' : 'Select From Time First'}</option>
+                  {getAvailableToTimes(formData.timeFrom).map(time => (
+                    <option key={time} value={time}>{time}</option>
+                  ))}
                 </select>
               </div>
             </div>
