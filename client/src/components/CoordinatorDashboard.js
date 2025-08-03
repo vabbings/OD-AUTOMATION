@@ -40,10 +40,23 @@ const CoordinatorDashboard = () => {
 
   const handleRequestAction = async (requestId, status) => {
     try {
-      await axios.put(`/api/requests/${requestId}`, { status });
+      const response = await axios.put(`/api/requests/${requestId}`, { status });
+      
+      if (status === 'Rejected') {
+        // Show success message for rejected and deleted requests
+        setSuccessMessage('Request rejected and automatically deleted');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        // Show success message for approved requests
+        setSuccessMessage('Request approved successfully');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      }
+      
       fetchData();
     } catch (error) {
       console.error('Error updating request:', error);
+      setSuccessMessage('Error processing request');
+      setTimeout(() => setSuccessMessage(''), 3000);
     }
   };
 

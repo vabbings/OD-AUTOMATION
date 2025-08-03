@@ -13,6 +13,7 @@ const StudentView = () => {
     timeTo: '',
     reason: ''
   });
+  const [gapCount, setGapCount] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -35,7 +36,8 @@ const StudentView = () => {
     const selectedDate = new Date(date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return selectedDate <= today; // This already allows same date (today)
+    selectedDate.setHours(0, 0, 0, 0);
+    return selectedDate <= today; // Allows current date and past dates
   };
 
   const validateTimeRange = (timeFrom, timeTo) => {
@@ -43,6 +45,18 @@ const StudentView = () => {
     const toTime = new Date(`2000-01-01 ${timeTo}`);
     return toTime > fromTime;
   };
+
+  // Define time gaps
+  const timeGaps = [
+    { from: '09:15 AM', to: '10:10 AM' },
+    { from: '10:15 AM', to: '11:10 AM' },
+    { from: '11:15 AM', to: '12:10 PM' },
+    { from: '12:15 PM', to: '01:10 PM' },
+    { from: '01:15 PM', to: '02:10 PM' },
+    { from: '02:15 PM', to: '03:10 PM' },
+    { from: '03:15 PM', to: '04:10 PM' },
+    { from: '04:15 PM', to: '05:10 PM' }
+  ];
 
   // Get available "To" time options based on selected "From" time
   const getAvailableToTimes = (timeFrom) => {
@@ -59,6 +73,27 @@ const StudentView = () => {
       const toTime = new Date(`2000-01-01 ${time}`);
       return toTime > fromTime;
     });
+  };
+
+  // Calculate how many time gaps are covered by the selected time range
+  const getTimeGapCount = (timeFrom, timeTo) => {
+    if (!timeFrom || !timeTo) return 0;
+    
+    const fromTime = new Date(`2000-01-01 ${timeFrom}`);
+    const toTime = new Date(`2000-01-01 ${timeTo}`);
+    
+    let gapCount = 0;
+    timeGaps.forEach(gap => {
+      const gapFrom = new Date(`2000-01-01 ${gap.from}`);
+      const gapTo = new Date(`2000-01-01 ${gap.to}`);
+      
+      // Check if this gap overlaps with the selected time range
+      if (gapFrom < toTime && gapTo > fromTime) {
+        gapCount++;
+      }
+    });
+    
+    return gapCount;
   };
 
   const handleSubmit = async (e) => {
@@ -90,11 +125,41 @@ const StudentView = () => {
       return;
     }
 
-    // Validate subject code (ABC123 format)
-    if (!validateSubjectCode(formData.subjectCode)) {
-      setError('Subject code should contain alphabets followed by numbers (e.g., ABC123)');
-      setSubmitting(false);
-      return;
+    // Check time gap count and validate multiple entries
+    const gapCount = getTimeGapCount(formData.timeFrom, formData.timeTo);
+    
+    if (gapCount > 1) {
+      // For multiple gaps, validate that subject codes and faculty codes are space-separated
+      const subjectCodes = formData.subjectCode.trim().split(/\s+/);
+      const facultyCodes = formData.facultyCode.trim().split(/\s+/);
+      
+      if (subjectCodes.length !== gapCount) {
+        setError(`You selected ${gapCount} time gaps. Please enter ${gapCount} subject codes separated by spaces (e.g., "CS101 CS102")`);
+        setSubmitting(false);
+        return;
+      }
+      
+      if (facultyCodes.length !== gapCount) {
+        setError(`You selected ${gapCount} time gaps. Please enter ${gapCount} faculty codes separated by spaces (e.g., "FAC001 FAC002")`);
+        setSubmitting(false);
+        return;
+      }
+      
+      // Validate each subject code
+      for (let i = 0; i < subjectCodes.length; i++) {
+        if (!validateSubjectCode(subjectCodes[i])) {
+          setError(`Subject code ${i + 1} should contain alphabets followed by numbers (e.g., ABC123)`);
+          setSubmitting(false);
+          return;
+        }
+      }
+    } else {
+      // Single gap validation
+      if (!validateSubjectCode(formData.subjectCode)) {
+        setError('Subject code should contain alphabets followed by numbers (e.g., ABC123)');
+        setSubmitting(false);
+        return;
+      }
     }
 
     // Validate date (no future dates)
@@ -178,6 +243,17 @@ const StudentView = () => {
         [name]: processedValue,
         timeTo: '' // Clear the "To" time when "From" time changes
       });
+      setGapCount(0); // Reset gap count
+    } else if (name === 'timeTo') {
+      setFormData({
+        ...formData,
+        [name]: processedValue
+      });
+      // Calculate gap count when both times are selected
+      if (formData.timeFrom && processedValue) {
+        const count = getTimeGapCount(formData.timeFrom, processedValue);
+        setGapCount(count);
+      }
     } else {
       setFormData({
         ...formData,
@@ -239,71 +315,7 @@ const StudentView = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name *
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                value={formData.name}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter your full name (auto-capitalized)"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="enrollmentNumber" className="block text-sm font-medium text-gray-700 mb-2">
-                Enrollment Number *
-              </label>
-              <input
-                type="text"
-                id="enrollmentNumber"
-                name="enrollmentNumber"
-                required
-                value={formData.enrollmentNumber}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter your enrollment number (starts with A)"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="subjectCode" className="block text-sm font-medium text-gray-700 mb-2">
-                Subject Code *
-              </label>
-              <input
-                type="text"
-                id="subjectCode"
-                name="subjectCode"
-                required
-                value={formData.subjectCode}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter subject code (e.g., ABC123)"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="facultyCode" className="block text-sm font-medium text-gray-700 mb-2">
-                Faculty Code *
-              </label>
-              <input
-                type="text"
-                id="facultyCode"
-                name="facultyCode"
-                required
-                value={formData.facultyCode}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="Enter faculty code"
-              />
-            </div>
-
+                    <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
                 Date *
@@ -317,22 +329,7 @@ const StudentView = () => {
                 onChange={handleInputChange}
                 max={new Date().toISOString().split('T')[0]}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2">
-                Reason *
-              </label>
-              <textarea
-                id="reason"
-                name="reason"
-                required
-                value={formData.reason}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                rows="4"
-                placeholder="Enter the reason for the OD request (auto-capitalized)"
+                placeholder="Select date (current date allowed)"
               />
             </div>
 
@@ -380,6 +377,96 @@ const StudentView = () => {
                   ))}
                 </select>
               </div>
+            </div>
+
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Full Name *
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder="Enter your full name (auto-capitalized)"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="enrollmentNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                Enrollment Number *
+              </label>
+              <input
+                type="text"
+                id="enrollmentNumber"
+                name="enrollmentNumber"
+                required
+                value={formData.enrollmentNumber}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder="Enter your enrollment number (starts with A)"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="subjectCode" className="block text-sm font-medium text-gray-700 mb-2">
+                Subject Code *
+                {gapCount > 1 && (
+                  <span className="text-sm text-blue-600 ml-2">
+                    ({gapCount} codes needed)
+                  </span>
+                )}
+              </label>
+              <input
+                type="text"
+                id="subjectCode"
+                name="subjectCode"
+                required
+                value={formData.subjectCode}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder={gapCount > 1 ? `Enter ${gapCount} subject codes separated by spaces (e.g., CS101 CS102)` : "Enter subject code (e.g., ABC123)"}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="facultyCode" className="block text-sm font-medium text-gray-700 mb-2">
+                Faculty Code *
+                {gapCount > 1 && (
+                  <span className="text-sm text-blue-600 ml-2">
+                    ({gapCount} codes needed)
+                  </span>
+                )}
+              </label>
+              <input
+                type="text"
+                id="facultyCode"
+                name="facultyCode"
+                required
+                value={formData.facultyCode}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                placeholder={gapCount > 1 ? `Enter ${gapCount} faculty codes separated by spaces (e.g., FAC001 FAC002)` : "Enter faculty code"}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2">
+                Reason *
+              </label>
+              <textarea
+                id="reason"
+                name="reason"
+                required
+                value={formData.reason}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                rows="4"
+                placeholder="Enter the reason for the OD request (auto-capitalized)"
+              />
             </div>
 
             <div className="pt-4">

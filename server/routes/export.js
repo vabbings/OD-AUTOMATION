@@ -47,62 +47,17 @@ const createExcelFile = async (approvedRequests) => {
     fgColor: { argb: 'FFE0E0E0' }
   };
 
-  // Group requests by faculty code and time
-  const groupedRequests = {};
+  // Add each request as a separate entry (no grouping)
   approvedRequests.forEach(request => {
-    const key = `${request.facultyCode}_${request.timeFrom}_${request.timeTo}`;
-    if (!groupedRequests[key]) {
-      groupedRequests[key] = [];
-    }
-    groupedRequests[key].push(request);
-  });
-
-  let currentRow = 2; // Start after header
-
-  // Add grouped data
-  Object.values(groupedRequests).forEach(group => {
-    // Add separator row if not first group
-    if (currentRow > 2) {
-      worksheet.addRow([]); // Blank row
-      currentRow++;
-    }
-
-    // Add group header
-    const firstRequest = group[0];
     worksheet.addRow({
-      facultyCode: firstRequest.facultyCode,
-      subjectCode: '',
-      name: `--- ${firstRequest.facultyCode} - ${firstRequest.timeFrom} to ${firstRequest.timeTo} ---`,
-      enrollmentNumber: '',
-      timeFrom: '',
-      timeTo: '',
-      reason: '',
-      status: ''
-    });
-
-    // Style the group header
-    const groupHeaderRow = worksheet.getRow(currentRow);
-    groupHeaderRow.font = { bold: true, color: { argb: 'FF0000FF' } };
-    groupHeaderRow.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FFF0F0F0' }
-    };
-    currentRow++;
-
-    // Add requests in this group
-    group.forEach(request => {
-      worksheet.addRow({
-        facultyCode: request.facultyCode,
-        subjectCode: request.subjectCode,
-        name: request.name,
-        enrollmentNumber: request.enrollmentNumber,
-        timeFrom: request.timeFrom,
-        timeTo: request.timeTo,
-        reason: request.reason,
-        status: request.status
-      });
-      currentRow++;
+      facultyCode: request.facultyCode,
+      subjectCode: request.subjectCode,
+      name: request.name,
+      enrollmentNumber: request.enrollmentNumber,
+      timeFrom: request.timeFrom,
+      timeTo: request.timeTo,
+      reason: request.reason,
+      status: request.status
     });
   });
 
