@@ -18,7 +18,7 @@ const LandingPage = () => {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative overflow-hidden"
       style={{
         backgroundImage: `url('/landing-bg.jpg')`,
         backgroundSize: 'cover',
@@ -26,12 +26,26 @@ const LandingPage = () => {
         backgroundRepeat: 'no-repeat'
       }}
     >
-      <div className="max-w-md w-full space-y-8 p-8 bg-white/90 backdrop-blur-sm rounded-lg shadow-2xl">
+      {/* Floating Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 left-20 w-4 h-4 bg-indigo-400 rounded-full animate-pulse opacity-60"></div>
+        <div className="absolute top-40 right-32 w-6 h-6 bg-purple-400 rounded-full animate-bounce opacity-40"></div>
+        <div className="absolute bottom-32 left-32 w-3 h-3 bg-pink-400 rounded-full animate-pulse opacity-50"></div>
+        <div className="absolute bottom-20 right-20 w-5 h-5 bg-cyan-400 rounded-full animate-bounce opacity-30"></div>
+      </div>
+              <div className="max-w-md w-full space-y-8 p-8 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 animate-float">
         <div className="text-center animate-fade-in">
-          <h1 className="text-5xl font-black text-black mb-2 animate-slide-down hover:scale-110 transition-all duration-500 cursor-default">
+          <div className="mb-4">
+            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg mb-4 animate-bounce">
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <h1 className="text-5xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2 animate-slide-down hover:scale-110 transition-all duration-500 cursor-default">
             OD AUTOMATION SYSTEM
           </h1>
-          <p className="text-gray-600 mb-8 animate-slide-up">
+          <p className="text-gray-700 mb-8 animate-slide-up font-medium">
             Choose your role to continue
           </p>
         </div>
@@ -40,7 +54,7 @@ const LandingPage = () => {
           <button
             onClick={() => handleNavigation('/coordinator/login', 'coordinator')}
             disabled={isLoading}
-            className={`w-full flex items-center justify-center px-6 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`w-full flex items-center justify-center px-6 py-4 border border-transparent text-lg font-medium rounded-xl text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl ${
               isLoading && loadingType === 'coordinator' ? 'animate-pulse' : ''
             }`}
           >
@@ -61,7 +75,7 @@ const LandingPage = () => {
           <button
             onClick={() => handleNavigation('/student', 'student')}
             disabled={isLoading}
-            className={`w-full flex items-center justify-center px-6 py-4 border border-gray-300 text-lg font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`w-full flex items-center justify-center px-6 py-4 border border-white/30 text-lg font-medium rounded-xl text-gray-700 bg-white/90 hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl backdrop-blur-sm ${
               isLoading && loadingType === 'student' ? 'animate-pulse' : ''
             }`}
           >
@@ -79,9 +93,15 @@ const LandingPage = () => {
           </button>
         </div>
         
-        <div className="text-center text-sm text-gray-500 mt-8">
-          <p>Coordinator: Manage and approve requests</p>
-          <p>Student: Submit OD requests with date and time</p>
+        <div className="text-center text-sm text-gray-600 mt-8 space-y-2">
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+            <p className="font-medium">Coordinator: Manage and approve requests</p>
+          </div>
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+            <p className="font-medium">Student: Submit OD requests with date and time</p>
+          </div>
         </div>
       </div>
     </div>
