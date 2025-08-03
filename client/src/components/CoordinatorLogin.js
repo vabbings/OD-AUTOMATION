@@ -31,8 +31,24 @@ const CoordinatorLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-900 via-purple-900 to-fuchsia-900">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20">
+    <div 
+      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative overflow-hidden"
+      style={{
+        backgroundImage: `url('/landing-bg.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Floating Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 left-20 w-4 h-4 bg-violet-400 rounded-full animate-pulse opacity-60"></div>
+        <div className="absolute top-40 right-32 w-6 h-6 bg-purple-400 rounded-full animate-bounce opacity-40"></div>
+        <div className="absolute bottom-32 left-32 w-3 h-3 bg-fuchsia-400 rounded-full animate-pulse opacity-50"></div>
+        <div className="absolute bottom-20 right-20 w-5 h-5 bg-violet-400 rounded-full animate-bounce opacity-30"></div>
+      </div>
+      
+      <div className="max-w-md w-full space-y-8 p-8 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/30 animate-float">
         <div className="text-center animate-fade-in">
           <h2 className="text-3xl font-bold text-white mb-2 animate-slide-down">
             Coordinator Login

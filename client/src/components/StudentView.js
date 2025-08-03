@@ -281,7 +281,23 @@ const StudentView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900">
+    <div 
+      className="min-h-screen bg-cover bg-center bg-no-repeat relative overflow-hidden"
+      style={{
+        backgroundImage: `url('/landing-bg.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Floating Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 left-20 w-4 h-4 bg-emerald-400 rounded-full animate-pulse opacity-60"></div>
+        <div className="absolute top-40 right-32 w-6 h-6 bg-teal-400 rounded-full animate-bounce opacity-40"></div>
+        <div className="absolute bottom-32 left-32 w-3 h-3 bg-cyan-400 rounded-full animate-pulse opacity-50"></div>
+        <div className="absolute bottom-20 right-20 w-5 h-5 bg-emerald-400 rounded-full animate-bounce opacity-30"></div>
+      </div>
+      
       {/* Header */}
       <div className="bg-white/10 backdrop-blur-md shadow-lg border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -299,16 +315,16 @@ const StudentView = () => {
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-8 animate-fade-in">
-          <h2 className="text-2xl font-semibold text-white mb-2 animate-slide-down">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2 animate-slide-down">
             OD Request Form
           </h2>
-          <p className="text-white/80 animate-slide-up">
+          <p className="text-gray-700 animate-slide-up font-medium">
             Fill in your details with proper validation rules
           </p>
         </div>
 
         {/* Request Form */}
-        <div className="bg-white/10 backdrop-blur-md rounded-xl shadow-2xl p-6 border border-white/20">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-white/30 animate-float">
           {error && (
             <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
               <div className="text-red-600 text-sm">{error}</div>
@@ -317,7 +333,7 @@ const StudentView = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="date" className="block text-sm font-medium text-white mb-2">
+              <label htmlFor="date" className="block text-sm font-medium text-gray-900 mb-2">
                 Date *
               </label>
               <input
@@ -328,7 +344,7 @@ const StudentView = () => {
                 value={formData.date}
                 onChange={handleInputChange}
                 max={new Date().toISOString().split('T')[0]}
-                className="w-full px-3 py-2 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent bg-white/20 text-white placeholder-white/60"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900 placeholder-gray-500"
                 placeholder="Select date (current date allowed)"
               />
             </div>

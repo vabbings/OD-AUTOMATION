@@ -110,7 +110,23 @@ const CoordinatorDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+    <div 
+      className="min-h-screen bg-cover bg-center bg-no-repeat relative overflow-hidden"
+      style={{
+        backgroundImage: `url('/landing-bg.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Floating Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 left-20 w-4 h-4 bg-indigo-400 rounded-full animate-pulse opacity-60"></div>
+        <div className="absolute top-40 right-32 w-6 h-6 bg-purple-400 rounded-full animate-bounce opacity-40"></div>
+        <div className="absolute bottom-32 left-32 w-3 h-3 bg-pink-400 rounded-full animate-pulse opacity-50"></div>
+        <div className="absolute bottom-20 right-20 w-5 h-5 bg-indigo-400 rounded-full animate-bounce opacity-30"></div>
+      </div>
+      
       {/* Header */}
       <div className="bg-white/10 backdrop-blur-md shadow-lg border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -148,7 +164,7 @@ const CoordinatorDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md shadow-2xl rounded-xl border border-white/20">
+          <div className="bg-white/95 backdrop-blur-md shadow-2xl rounded-2xl border border-white/30 animate-float">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-white/20">
                 <thead className="bg-white/20 backdrop-blur-sm">
