@@ -12,16 +12,10 @@ const requireAuth = (req, res, next) => {
 // POST /api/requests - Submit OD request (Public)
 router.post('/requests', (req, res) => {
   try {
-    const { name, enrollmentNumber, subjectCode, facultyCode, slotId } = req.body;
+    const { name, enrollmentNumber, subjectCode, facultyCode, date, timeFrom, timeTo, reason } = req.body;
     
-    if (!name || !enrollmentNumber || !subjectCode || !facultyCode || !slotId) {
+    if (!name || !enrollmentNumber || !subjectCode || !facultyCode || !date || !timeFrom || !timeTo || !reason) {
       return res.status(400).json({ error: 'All fields are required' });
-    }
-    
-    // Check if slot exists
-    const slot = global.slots.find(s => s._id === slotId);
-    if (!slot) {
-      return res.status(404).json({ error: 'Slot not found' });
     }
     
     const request = {
@@ -30,7 +24,10 @@ router.post('/requests', (req, res) => {
       enrollmentNumber,
       subjectCode,
       facultyCode,
-      slotId,
+      date,
+      timeFrom,
+      timeTo,
+      reason,
       status: 'Pending',
       createdAt: new Date(),
       updatedAt: new Date()
@@ -48,14 +45,7 @@ router.post('/requests', (req, res) => {
 // GET /api/requests - Get all OD requests (Coordinator only)
 router.get('/requests', requireAuth, (req, res) => {
   try {
-    const requests = global.requests.map(request => {
-      const slot = global.slots.find(s => s._id === request.slotId);
-      return {
-        ...request,
-        slotId: slot || { title: 'Unknown', date: new Date(), time: 'Unknown' }
-      };
-    }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
+    const requests = global.requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     res.json(requests);
   } catch (error) {
     console.error('Error fetching requests:', error);
@@ -81,12 +71,8 @@ router.put('/requests/:id', requireAuth, (req, res) => {
     global.requests[requestIndex].updatedAt = new Date();
     
     const updatedRequest = global.requests[requestIndex];
-    const slot = global.slots.find(s => s._id === updatedRequest.slotId);
     
-    res.json({
-      ...updatedRequest,
-      slotId: slot || { title: 'Unknown', date: new Date(), time: 'Unknown' }
-    });
+    res.json(updatedRequest);
   } catch (error) {
     console.error('Error updating request:', error);
     res.status(500).json({ error: 'Server error' });

@@ -18,6 +18,32 @@ const StudentView = () => {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  // Validation functions
+  const validateName = (name) => {
+    return /^[A-Za-z\s]+$/.test(name);
+  };
+
+  const validateEnrollmentNumber = (enrollmentNumber) => {
+    return /^A\d+$/.test(enrollmentNumber);
+  };
+
+  const validateSubjectCode = (subjectCode) => {
+    return /^[A-Za-z]+\d+$/.test(subjectCode);
+  };
+
+  const validateDate = (date) => {
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selectedDate <= today;
+  };
+
+  const validateTimeRange = (timeFrom, timeTo) => {
+    const fromTime = new Date(`2000-01-01 ${timeFrom}`);
+    const toTime = new Date(`2000-01-01 ${timeTo}`);
+    return toTime > fromTime;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -33,9 +59,37 @@ const StudentView = () => {
       return;
     }
 
-    // Validate time restrictions
-    if (!formData.timeFrom || !formData.timeTo) {
-      setError('Please select both Time From and Time To');
+    // Validate name (only alphabets)
+    if (!validateName(formData.name)) {
+      setError('Name should contain only alphabets');
+      setSubmitting(false);
+      return;
+    }
+
+    // Validate enrollment number (A followed by numbers)
+    if (!validateEnrollmentNumber(formData.enrollmentNumber)) {
+      setError('Enrollment number should start with "A" followed by numbers');
+      setSubmitting(false);
+      return;
+    }
+
+    // Validate subject code (ABC123 format)
+    if (!validateSubjectCode(formData.subjectCode)) {
+      setError('Subject code should contain alphabets followed by numbers (e.g., ABC123)');
+      setSubmitting(false);
+      return;
+    }
+
+    // Validate date (no future dates)
+    if (!validateDate(formData.date)) {
+      setError('Cannot select future dates');
+      setSubmitting(false);
+      return;
+    }
+
+    // Validate time range (to time should be after from time)
+    if (!validateTimeRange(formData.timeFrom, formData.timeTo)) {
+      setError('To time should be after From time');
       setSubmitting(false);
       return;
     }
@@ -119,7 +173,7 @@ const StudentView = () => {
             OD Request Form
           </h2>
           <p className="text-gray-600 animate-slide-up">
-            Fill in your details and select your preferred date and time
+            Fill in your details with proper validation rules
           </p>
         </div>
 
@@ -207,6 +261,7 @@ const StudentView = () => {
                 required
                 value={formData.date}
                 onChange={handleInputChange}
+                max={new Date().toISOString().split('T')[0]}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
