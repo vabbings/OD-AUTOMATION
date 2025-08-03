@@ -281,15 +281,15 @@ const StudentView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900">
       {/* Header */}
-      <div className="bg-white shadow">
+      <div className="bg-white/10 backdrop-blur-md shadow-lg border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <h1 className="text-3xl font-bold text-gray-900 animate-slide-down">Submit OD Request</h1>
+            <h1 className="text-3xl font-bold text-white animate-slide-down">Submit OD Request</h1>
             <button
               onClick={() => navigate('/')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200 hover:scale-105"
+              className="px-4 py-2 text-sm font-medium text-white bg-white/20 hover:bg-white/30 rounded-lg backdrop-blur-sm transition-all duration-300 hover:scale-105"
             >
               Back to Home
             </button>
@@ -299,16 +299,16 @@ const StudentView = () => {
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-8 animate-fade-in">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2 animate-slide-down">
+          <h2 className="text-2xl font-semibold text-white mb-2 animate-slide-down">
             OD Request Form
           </h2>
-          <p className="text-gray-600 animate-slide-up">
+          <p className="text-white/80 animate-slide-up">
             Fill in your details with proper validation rules
           </p>
         </div>
 
         {/* Request Form */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white/10 backdrop-blur-md rounded-xl shadow-2xl p-6 border border-white/20">
           {error && (
             <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
               <div className="text-red-600 text-sm">{error}</div>
@@ -317,7 +317,7 @@ const StudentView = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="date" className="block text-sm font-medium text-white mb-2">
                 Date *
               </label>
               <input
@@ -328,7 +328,7 @@ const StudentView = () => {
                 value={formData.date}
                 onChange={handleInputChange}
                 max={new Date().toISOString().split('T')[0]}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent bg-white/20 text-white placeholder-white/60"
                 placeholder="Select date (current date allowed)"
               />
             </div>

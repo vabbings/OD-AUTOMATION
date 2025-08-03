@@ -31,20 +31,20 @@ const CoordinatorLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-md w-full space-y-8 p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-900 via-purple-900 to-fuchsia-900">
+      <div className="max-w-md w-full space-y-8 p-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20">
         <div className="text-center animate-fade-in">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2 animate-slide-down">
+          <h2 className="text-3xl font-bold text-white mb-2 animate-slide-down">
             Coordinator Login
           </h2>
-          <p className="text-gray-600 animate-slide-up">
+          <p className="text-white/80 animate-slide-up">
             Enter your password to access the coordinator dashboard
           </p>
         </div>
         
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-white mb-2">
               Password
             </label>
             <div className="relative">
@@ -55,7 +55,7 @@ const CoordinatorLogin = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                className="w-full px-3 py-2 pr-10 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent bg-white/20 text-white placeholder-white/60 transition-all duration-200"
                 placeholder="Enter password"
               />
               <button
