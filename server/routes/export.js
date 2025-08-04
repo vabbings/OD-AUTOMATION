@@ -47,8 +47,16 @@ const createExcelFile = async (approvedRequests) => {
     fgColor: { argb: 'FFE0E0E0' }
   };
 
-  // Add each request as a separate entry (no grouping)
-  approvedRequests.forEach(request => {
+  // Sort approved requests by faculty code
+  const sortedRequests = approvedRequests.sort((a, b) => {
+    // Handle cases where facultyCode might be undefined or null
+    const facultyCodeA = (a.facultyCode || '').toString().toLowerCase();
+    const facultyCodeB = (b.facultyCode || '').toString().toLowerCase();
+    return facultyCodeA.localeCompare(facultyCodeB);
+  });
+
+  // Add each request as a separate entry (sorted by faculty code)
+  sortedRequests.forEach(request => {
     worksheet.addRow({
       facultyCode: request.facultyCode,
       subjectCode: request.subjectCode,

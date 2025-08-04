@@ -12,20 +12,8 @@ const CoordinatorDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuth();
     fetchData();
   }, []);
-
-  const checkAuth = async () => {
-    try {
-      const response = await axios.get('/api/check-auth');
-      if (!response.data.isAuthenticated) {
-        navigate('/coordinator/login');
-      }
-    } catch (error) {
-      navigate('/coordinator/login');
-    }
-  };
 
   const fetchData = async () => {
     try {

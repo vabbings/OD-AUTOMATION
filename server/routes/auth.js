@@ -1,22 +1,23 @@
 const express = require('express');
 const router = express.Router();
 
-// Hardcoded coordinator password
+// Hardcoded coordinator credentials
+const COORDINATOR_USERNAME = 'amity@admin';
 const COORDINATOR_PASSWORD = 'admin123';
 
 // POST /api/login - Coordinator login
 router.post('/login', (req, res) => {
-  const { password } = req.body;
+  const { username, password } = req.body;
   
-  if (!password) {
-    return res.status(400).json({ error: 'Password is required' });
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required' });
   }
   
-  if (password === COORDINATOR_PASSWORD) {
+  if (username === COORDINATOR_USERNAME && password === COORDINATOR_PASSWORD) {
     req.session.isCoordinator = true;
     res.json({ success: true, message: 'Login successful' });
   } else {
-    res.status(401).json({ error: 'Invalid password' });
+    res.status(401).json({ error: 'Invalid username or password' });
   }
 });
 

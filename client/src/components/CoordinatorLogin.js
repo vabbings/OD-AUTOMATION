@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CoordinatorLogin = () => {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -15,7 +16,7 @@ const CoordinatorLogin = () => {
     setError('');
 
     try {
-      const response = await axios.post('/api/login', { password });
+      const response = await axios.post('/api/login', { username, password });
       if (response.data.success) {
         navigate('/coordinator/dashboard');
       }
@@ -59,6 +60,22 @@ const CoordinatorLogin = () => {
         </div>
         
         <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-900 mb-2">
+              Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900 placeholder-gray-500 transition-all duration-200"
+              placeholder="Enter username"
+            />
+          </div>
+          
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">
               Password
